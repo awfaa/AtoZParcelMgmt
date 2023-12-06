@@ -39,11 +39,11 @@ class Storage {
         .toList();
   } // Return empty list if all houses have parcels
 
-// person
+// zaty
   void removeExpiredParcels() {
     parcelsByHouse.forEach((houseNumber, parcels) {
       parcels.removeWhere((parcel) {
-        return DateTime.now().difference(parcel.storageDate).inDays > 2;
+        return DateTime.now().difference(parcel.dateSent).inDays > 2;
       });
     });
   }
@@ -51,7 +51,7 @@ class Storage {
   void removeExpiredParcelsBasedOnInputDate(DateTime currentDate) {
     parcelsByHouse.forEach((houseNumber, parcels) {
       parcels.removeWhere((parcel) {
-        return currentDate.difference(parcel.storageDate).inDays > 2;
+        return currentDate.difference(parcel.dateSent).inDays > 2;
       });
     });
   }
