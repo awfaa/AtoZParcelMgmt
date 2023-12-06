@@ -1,14 +1,16 @@
 // parcel.dart
-//awfa
 class Parcel {
   String sender;
+  String recipient;
   int houseNumber;
-  DateTime deliveryDate;
+  DateTime storageDate;
+  DateTime dateSent;
 
-  Parcel(this.sender, this.houseNumber) : deliveryDate = DateTime.now();
-
-  @override
-  String toString() {
-    return 'From: $sender, # $houseNumber';
-  }
+  Parcel({
+    required this.sender,
+    required this.recipient,
+    required this.houseNumber,
+    required this.storageDate,
+    required this.dateSent,
+  });
 }

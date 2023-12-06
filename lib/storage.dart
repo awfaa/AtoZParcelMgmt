@@ -1,35 +1,55 @@
 // storage.dart
-//zaty
 import 'parcel.dart';
 
 class Storage {
-  int capacity = 5;
-  List<Parcel> parcels = [];
+  Map<int, List<Parcel>> parcelsByHouse = {};
 
-  bool isFull() {
-    return parcels.length >= capacity;
-  }
+  get parcels => null;
 
-  void storeParcel(Parcel parcel) {
-    if (!isFull()) {
-      parcels.add(parcel);
-      print('Parcel for house ${parcel.houseNumber} stored successfully.');
+  bool storeParcel(Parcel parcel) {
+    if (parcelsByHouse.containsKey(parcel.houseNumber)) {
+      // Check if the storage limit for the house is reached
+      if (parcelsByHouse[parcel.houseNumber]!.length < 5) {
+        parcelsByHouse[parcel.houseNumber]!.add(parcel);
+        return true;
+      }
     } else {
-      print('Storage is full. Cannot store more parcels.');
+      // Initialize the list for the house if it doesn't exist
+      parcelsByHouse[parcel.houseNumber] = [parcel];
+      return true;
     }
+    return false;
   }
 
-  Parcel collectParcel() {
-    if (parcels.isNotEmpty) {
-      return parcels.removeAt(0);
-    } else {
-      print('No parcels in storage.');
-      return Parcel('', 0); // Placeholder for no parcel
-    }
+  List<Parcel> getParcelsByHouseNumber(int houseNumber) {
+    return parcelsByHouse[houseNumber] ?? [];
   }
 
-  @override
-  String toString() {
-    return 'Parcels in Storage: $parcels';
+  List<int> getHouseNumbersWithParcels() {
+    return parcelsByHouse.keys.toList();
+  }
+
+  List<int> getHouseNumbersWithoutParcels() {
+    List<int> allHouseNumbers = List.generate(30, (index) => index + 1);
+    List<int> houseNumbersWithParcels = getHouseNumbersWithParcels();
+    return allHouseNumbers
+        .where((number) => !houseNumbersWithParcels.contains(number))
+        .toList();
+  }
+
+  void removeExpiredParcels() {
+    parcelsByHouse.forEach((houseNumber, parcels) {
+      parcels.removeWhere((parcel) {
+        return DateTime.now().difference(parcel.storageDate).inDays > 2;
+      });
+    });
+  }
+
+  void removeExpiredParcelsBasedOnInputDate(DateTime currentDate) {
+    parcelsByHouse.forEach((houseNumber, parcels) {
+      parcels.removeWhere((parcel) {
+        return currentDate.difference(parcel.storageDate).inDays > 2;
+      });
+    });
   }
 }
