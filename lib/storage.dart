@@ -1,8 +1,10 @@
 // storage.dart
+//awfa
 import 'parcel.dart';
 
 class Storage {
-  Map<int, List<Parcel>> parcelsByHouse = {};
+  Map<int, List<Parcel>> parcelsByHouse =
+      {}; // Map of house numbers to list of parcels
 
   get parcels => null;
 
@@ -23,11 +25,11 @@ class Storage {
 
   List<Parcel> getParcelsByHouseNumber(int houseNumber) {
     return parcelsByHouse[houseNumber] ?? [];
-  }
+  } // Return empty list if house number does not exist
 
   List<int> getHouseNumbersWithParcels() {
     return parcelsByHouse.keys.toList();
-  }
+  } // Return empty list if no parcels are stored
 
   List<int> getHouseNumbersWithoutParcels() {
     List<int> allHouseNumbers = List.generate(30, (index) => index + 1);
@@ -35,8 +37,9 @@ class Storage {
     return allHouseNumbers
         .where((number) => !houseNumbersWithParcels.contains(number))
         .toList();
-  }
+  } // Return empty list if all houses have parcels
 
+// person
   void removeExpiredParcels() {
     parcelsByHouse.forEach((houseNumber, parcels) {
       parcels.removeWhere((parcel) {

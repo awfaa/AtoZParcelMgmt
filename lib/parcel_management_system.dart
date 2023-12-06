@@ -1,4 +1,5 @@
 // parcel_management.dart
+//awfa, zaty, jia
 import 'package:flutter/material.dart';
 import 'storage.dart';
 import 'parcel.dart';
@@ -6,7 +7,7 @@ import 'parcel.dart';
 class ParcelManagement extends StatefulWidget {
   @override
   _ParcelManagementState createState() => _ParcelManagementState();
-}
+} // Stateful widget that the main application instantiates
 
 class _ParcelManagementState extends State<ParcelManagement> {
   Storage storage = Storage();
@@ -16,6 +17,7 @@ class _ParcelManagementState extends State<ParcelManagement> {
   TextEditingController dateSentController = TextEditingController();
 
   void showStorageFullDialog(BuildContext context) {
+    // Show dialog when storage is full
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -71,20 +73,21 @@ class _ParcelManagementState extends State<ParcelManagement> {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // Example of storing a parcel
+                  // Store parcel in storage
                   String sender = senderController.text;
                   String recipient = recipientController.text;
                   int houseNumber =
                       int.tryParse(houseNumberController.text) ?? 0;
                   String dateSentString = dateSentController.text;
 
-                  if (sender.isNotEmpty &&
+                  if (sender.isNotEmpty && // Check if all fields are not empty
                       recipient.isNotEmpty &&
                       houseNumber > 0 &&
                       dateSentString.isNotEmpty) {
                     DateTime dateSent = DateTime.parse(dateSentString);
 
                     Parcel newParcel = Parcel(
+                      // Create new parcel object
                       sender: sender,
                       recipient: recipient,
                       houseNumber: houseNumber,
@@ -92,7 +95,8 @@ class _ParcelManagementState extends State<ParcelManagement> {
                       dateSent: dateSent,
                     );
 
-                    bool success = storage.storeParcel(newParcel);
+                    bool success = storage
+                        .storeParcel(newParcel); // Store parcel in storage
 
                     if (success) {
                       print('Parcel stored successfully!');
@@ -113,8 +117,8 @@ class _ParcelManagementState extends State<ParcelManagement> {
                   // Remove expired parcels
                   storage.removeExpiredParcelsBasedOnInputDate(DateTime.now());
                   print('Expired parcels removed.');
-                  await Future.delayed(Duration(
-                      milliseconds: 300)); // Delay to ensure proper removal
+                  await Future.delayed(
+                      Duration(milliseconds: 300)); // Delay to show dialog
                   setState(() {});
                 },
                 child: Text('Remove Expired Parcels'),
@@ -123,12 +127,12 @@ class _ParcelManagementState extends State<ParcelManagement> {
               Text('Stored Parcels:'),
               Container(
                 // Wrap ListView.builder with a Container
-                height: 300, // Provide a fixed height
+                height: 300,
                 child: ListView.builder(
                   itemCount: storage.getHouseNumbersWithParcels().length,
                   itemBuilder: (context, index) {
-                    int houseNumber =
-                        storage.getHouseNumbersWithParcels()[index];
+                    int houseNumber = storage.getHouseNumbersWithParcels()[
+                        index]; // Get house number from list
                     List<Parcel> parcels =
                         storage.getParcelsByHouseNumber(houseNumber);
                     return Column(
@@ -136,7 +140,8 @@ class _ParcelManagementState extends State<ParcelManagement> {
                       children: [
                         Text('House Number: $houseNumber'),
                         ListView.builder(
-                          shrinkWrap: true,
+                          shrinkWrap:
+                              true, // to prevent the ListView from occupying the entire height of the parent
                           itemCount: parcels.length,
                           itemBuilder: (context, index) {
                             Parcel parcel = parcels[index];
@@ -157,7 +162,7 @@ class _ParcelManagementState extends State<ParcelManagement> {
               ),
               SizedBox(height: 20),
               Text(
-                  'House Numbers without Parcels: ${storage.getHouseNumbersWithoutParcels()}'),
+                  'House Numbers without Parcels: ${storage.getHouseNumbersWithoutParcels()}'), // Display house numbers without parcels
             ],
           ),
         ),
