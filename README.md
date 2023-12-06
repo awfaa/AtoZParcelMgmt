@@ -5,7 +5,7 @@ Group name: AtoZ
 Group member details:
     Awfa binti Azlin 2026420
     Nurul Izzaty binti Muhammad Aris 2022876
-    Nur Najiha binti Abdul Kadir   
+    Najiha binti Abdul Khaidir 1912042 
 
  Tasks Assigned:
    Main.dart - Izzaty
