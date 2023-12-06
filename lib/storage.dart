@@ -51,6 +51,7 @@ class Storage {
   void removeExpiredParcelsBasedOnInputDate(DateTime currentDate) {
     parcelsByHouse.forEach((houseNumber, parcels) {
       parcels.removeWhere((parcel) {
+        // Update the date comparison logic
         return currentDate.difference(parcel.dateSent).inDays > 2;
       });
     });
