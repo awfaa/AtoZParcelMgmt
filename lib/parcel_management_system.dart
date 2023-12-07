@@ -1,9 +1,10 @@
 // parcel_management.dart
-//awfa, zaty, jia
+// Awfa 2026420, Izzaty 2022876, Najiha 1912042
 import 'package:flutter/material.dart';
 import 'storage.dart';
 import 'parcel.dart';
 
+//Awfa 2026420
 class ParcelManagement extends StatefulWidget {
   @override
   _ParcelManagementState createState() => _ParcelManagementState();
@@ -11,7 +12,8 @@ class ParcelManagement extends StatefulWidget {
 
 class _ParcelManagementState extends State<ParcelManagement> {
   Storage storage = Storage();
-  TextEditingController senderController = TextEditingController();
+  TextEditingController senderController =
+      TextEditingController(); // To get the value from the text field
   TextEditingController recipientController = TextEditingController();
   TextEditingController houseNumberController = TextEditingController();
   int selectedDay = 1;
@@ -39,6 +41,7 @@ class _ParcelManagementState extends State<ParcelManagement> {
     );
   }
 
+// Izzaty 2022876
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +63,7 @@ class _ParcelManagementState extends State<ParcelManagement> {
                 controller: recipientController,
                 decoration: InputDecoration(labelText: 'Recipient Name'),
               ),
-             SizedBox(height: 10),
+              SizedBox(height: 10),
               TextField(
                 controller: houseNumberController,
                 decoration: InputDecoration(labelText: 'House Number'),
@@ -87,10 +90,11 @@ class _ParcelManagementState extends State<ParcelManagement> {
                   int houseNumber =
                       int.tryParse(houseNumberController.text) ?? 0;
 
-                 if (sender.isNotEmpty &&
+                  if (sender.isNotEmpty &&
                       recipient.isNotEmpty &&
                       houseNumber > 0) {
-                    DateTime dateSent = DateTime(selectedYear, selectedMonth, selectedDay);
+                    DateTime dateSent =
+                        DateTime(selectedYear, selectedMonth, selectedDay);
 
                     Parcel newParcel = Parcel(
                       // Create new parcel object
@@ -101,7 +105,8 @@ class _ParcelManagementState extends State<ParcelManagement> {
                       dateSent: dateSent,
                     );
 
-                    bool success = storage.storeParcel(newParcel); // Store parcel in storage
+                    bool success = storage
+                        .storeParcel(newParcel); // Store parcel in storage
 
                     if (success) {
                       print('Parcel stored successfully!');
@@ -136,14 +141,17 @@ class _ParcelManagementState extends State<ParcelManagement> {
                 child: ListView.builder(
                   itemCount: storage.getHouseNumbersWithParcels().length,
                   itemBuilder: (context, index) {
-                    int houseNumber = storage.getHouseNumbersWithParcels()[index]; // Get house number from list
-                     List<Parcel> parcels = storage.getParcelsByHouseNumber(houseNumber);
+                    int houseNumber = storage.getHouseNumbersWithParcels()[
+                        index]; // Get house number from list
+                    List<Parcel> parcels =
+                        storage.getParcelsByHouseNumber(houseNumber);
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('House Number: $houseNumber'),
                         ListView.builder(
-                          shrinkWrap: true, // to prevent the ListView from occupying the entire height of the parent
+                          shrinkWrap:
+                              true, // to prevent the ListView from occupying the entire height of the parent
                           itemCount: parcels.length,
                           itemBuilder: (context, index) {
                             Parcel parcel = parcels[index];
@@ -163,7 +171,8 @@ class _ParcelManagementState extends State<ParcelManagement> {
                 ),
               ),
               SizedBox(height: 20),
-              Text('House Numbers without Parcels: ${storage.getHouseNumbersWithoutParcels()}'), // Display house numbers without parcels
+              Text(
+                  'House Numbers without Parcels: ${storage.getHouseNumbersWithoutParcels()}'), // Display house numbers without parcels
             ],
           ),
         ),
@@ -171,6 +180,7 @@ class _ParcelManagementState extends State<ParcelManagement> {
     );
   }
 
+//Najiha 1912042
   DropdownButton<int> buildDayDropdown() {
     return DropdownButton<int>(
       value: selectedDay,
@@ -225,4 +235,3 @@ class _ParcelManagementState extends State<ParcelManagement> {
     );
   }
 }
-

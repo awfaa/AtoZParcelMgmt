@@ -1,5 +1,5 @@
 // main.dart
-//Nurul Izzaty Binti Muhammad Aris 2022876
+// Izzaty 2022876
 import 'package:flutter/material.dart';
 import 'parcel_management_system.dart';
 

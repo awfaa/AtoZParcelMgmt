@@ -1,10 +1,10 @@
 // storage.dart
-//awfa
+// Awfa 2026420
 import 'parcel.dart';
 
 class Storage {
   Map<int, List<Parcel>> parcelsByHouse =
-      {}; // Map of house numbers to list of parcels
+      {}; // declares a Map that associates house numbers with a list of Parcel objects
 
   get parcels => null;
 
@@ -39,7 +39,7 @@ class Storage {
         .toList();
   } // Return empty list if all houses have parcels
 
-// Nurul Izzaty Binti Muhammad Aris 2022876
+// Izzaty 2022876
   void removeExpiredParcels() {
     // Declaration function-does not return any value
     parcelsByHouse.forEach((houseNumber, parcels) {
