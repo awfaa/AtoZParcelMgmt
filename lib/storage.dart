@@ -41,18 +41,21 @@ class Storage {
 
 // Nurul Izzaty Binti Muhammad Aris 2022876
   void removeExpiredParcels() {
+    // Declaration function-does not return any value
     parcelsByHouse.forEach((houseNumber, parcels) {
       parcels.removeWhere((parcel) {
         return DateTime.now().difference(parcel.dateSent).inDays > 2;
       });
     });
-  }
+  } // Remove parcels that have been stored for more than 2 days
 
   void removeExpiredParcelsBasedOnInputDate(DateTime currentDate) {
     parcelsByHouse.forEach((houseNumber, parcels) {
-      parcels.removeWhere((parcel) {
+      parcels.removeWhere(
+          (parcel) //to check the difference between current date and datetime and the parcel was sent
+          {
         return currentDate.difference(parcel.dateSent).inDays > 2;
-      });
+      }); // return true if the parcel is more than 2 days, and the parcel will be removed from the list
     });
-  }
+  } // Remove parcels that have been stored for more than 2 days based on input date
 }
