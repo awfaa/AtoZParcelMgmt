@@ -14,7 +14,9 @@ class _ParcelManagementState extends State<ParcelManagement> {
   TextEditingController senderController = TextEditingController();
   TextEditingController recipientController = TextEditingController();
   TextEditingController houseNumberController = TextEditingController();
-  TextEditingController dateSentController = TextEditingController();
+  int selectedDay = 1;
+  int selectedMonth = 1;
+  int selectedYear = DateTime.now().year;
 
   void showStorageFullDialog(BuildContext context) {
     // Show dialog when storage is full
@@ -58,17 +60,23 @@ class _ParcelManagementState extends State<ParcelManagement> {
                 controller: recipientController,
                 decoration: InputDecoration(labelText: 'Recipient Name'),
               ),
-              SizedBox(height: 10),
+             SizedBox(height: 10),
               TextField(
                 controller: houseNumberController,
                 decoration: InputDecoration(labelText: 'House Number'),
                 keyboardType: TextInputType.number,
               ),
               SizedBox(height: 10),
-              TextField(
-                controller: dateSentController,
-                decoration:
-                    InputDecoration(labelText: 'Date Sent (YYYY-MM-DD)'),
+              Row(
+                children: [
+                  Text('Date Sent:'),
+                  SizedBox(width: 10),
+                  buildDayDropdown(),
+                  SizedBox(width: 10),
+                  buildMonthDropdown(),
+                  SizedBox(width: 10),
+                  buildYearDropdown(),
+                ],
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -78,13 +86,11 @@ class _ParcelManagementState extends State<ParcelManagement> {
                   String recipient = recipientController.text;
                   int houseNumber =
                       int.tryParse(houseNumberController.text) ?? 0;
-                  String dateSentString = dateSentController.text;
 
-                  if (sender.isNotEmpty && // Check if all fields are not empty
+                 if (sender.isNotEmpty &&
                       recipient.isNotEmpty &&
-                      houseNumber > 0 &&
-                      dateSentString.isNotEmpty) {
-                    DateTime dateSent = DateTime.parse(dateSentString);
+                      houseNumber > 0) {
+                    DateTime dateSent = DateTime(selectedYear, selectedMonth, selectedDay);
 
                     Parcel newParcel = Parcel(
                       // Create new parcel object
@@ -95,8 +101,7 @@ class _ParcelManagementState extends State<ParcelManagement> {
                       dateSent: dateSent,
                     );
 
-                    bool success = storage
-                        .storeParcel(newParcel); // Store parcel in storage
+                    bool success = storage.storeParcel(newParcel); // Store parcel in storage
 
                     if (success) {
                       print('Parcel stored successfully!');
@@ -131,17 +136,14 @@ class _ParcelManagementState extends State<ParcelManagement> {
                 child: ListView.builder(
                   itemCount: storage.getHouseNumbersWithParcels().length,
                   itemBuilder: (context, index) {
-                    int houseNumber = storage.getHouseNumbersWithParcels()[
-                        index]; // Get house number from list
-                    List<Parcel> parcels =
-                        storage.getParcelsByHouseNumber(houseNumber);
+                    int houseNumber = storage.getHouseNumbersWithParcels()[index]; // Get house number from list
+                     List<Parcel> parcels = storage.getParcelsByHouseNumber(houseNumber);
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('House Number: $houseNumber'),
                         ListView.builder(
-                          shrinkWrap:
-                              true, // to prevent the ListView from occupying the entire height of the parent
+                          shrinkWrap: true, // to prevent the ListView from occupying the entire height of the parent
                           itemCount: parcels.length,
                           itemBuilder: (context, index) {
                             Parcel parcel = parcels[index];
@@ -161,12 +163,66 @@ class _ParcelManagementState extends State<ParcelManagement> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                  'House Numbers without Parcels: ${storage.getHouseNumbersWithoutParcels()}'), // Display house numbers without parcels
+              Text('House Numbers without Parcels: ${storage.getHouseNumbersWithoutParcels()}'), // Display house numbers without parcels
             ],
           ),
         ),
       ),
     );
   }
+
+  DropdownButton<int> buildDayDropdown() {
+    return DropdownButton<int>(
+      value: selectedDay,
+      onChanged: (int? value) {
+        setState(() {
+          selectedDay = value!;
+        });
+      },
+      items: List.generate(31, (index) => index + 1)
+          .map<DropdownMenuItem<int>>((int value) {
+        return DropdownMenuItem<int>(
+          value: value,
+          child: Text(value.toString()),
+        );
+      }).toList(),
+    );
+  }
+
+  DropdownButton<int> buildMonthDropdown() {
+    return DropdownButton<int>(
+      value: selectedMonth,
+      onChanged: (int? value) {
+        setState(() {
+          selectedMonth = value!;
+        });
+      },
+      items: List.generate(12, (index) => index + 1)
+          .map<DropdownMenuItem<int>>((int value) {
+        return DropdownMenuItem<int>(
+          value: value,
+          child: Text(value.toString()),
+        );
+      }).toList(),
+    );
+  }
+
+  DropdownButton<int> buildYearDropdown() {
+    return DropdownButton<int>(
+      value: selectedYear,
+      onChanged: (int? value) {
+        setState(() {
+          selectedYear = value!;
+        });
+      },
+      items: List.generate(30, (index) => DateTime.now().year - index)
+          .map<DropdownMenuItem<int>>((int value) {
+        return DropdownMenuItem<int>(
+          value: value,
+          child: Text(value.toString()),
+        );
+      }).toList(),
+    );
+  }
 }
+
